@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false" default-autowire="byType" default-autowire-candidates="">
+    <!--xmlns:p="http://www.springframework.org/schema/p"   使用p 命名空间的schema-->
+    <alias name="bean" alias="bean2"/>
+    <bean class="org.zxy.bean.DefaultServiceLocator" name="defaultServiceLocator"/>
+    <bean class="org.zxy.bean.OneBean" id="bean" name="oneBean" factory-bean="defaultServiceLocator"
+          factory-method="createOneBeanInstance" autowire-candidate="false">
+        <property name="properties">
+            <value>
+                jdbc.driver.className=com.mysql.jdbc.Driver
+                jdbc.url=jdbc:mysql://localhost:3306/mydb
+            </value>
+        </property>
+    </bean>
+    <bean class="org.zxy.bean.ClientService" name="clientService" factory-bean="defaultServiceLocator"
+          factory-method="createClientServiceInstance">
+    </bean>
+    <bean id="thingOne" class="org.zxy.DependencyInjection.ThingOne">
+        <constructor-arg ref="thingThree"/>
+        <constructor-arg ref="thingTwo"/>
+    </bean>
+    <bean class="org.zxy.DependencyInjection.ThingTwo" id="thingTwo"/>
+    <bean class="org.zxy.DependencyInjection.ThingThree" id="thingThree"/>
+    <bean class="org.zxy.DependencyInjection.ExampleBean" id="exampleBean">
+        <!--可以使用 type或者index属性，如果没有type和index 就依赖constructor-arg标签出现的顺序-->
+        <!--##################使用type属性定位参数和值的关系-->
+        <!--<constructor-arg type="int"  value="75000"/>-->
+        <!--<constructor-arg type="java.lang.String"  value="The Answer to Life, the Universe, and Everything"/>-->
+        <!--##################使用index定位参数和值的关系-->
+        <!--<constructor-arg index="1"  value="The Answer to Life, the Universe, and Everything"/>-->
+        <!--<constructor-arg index="0" value="75000"/>-->
+        <!--##################使用name定位参数和值的关系    这种方式补考普在release模式下参数名称会变化 需要在构造器上加ConstructorProperties配置使用-->
+        <constructor-arg name="ultimateAnswer"  value="The Answer to Life, the Universe, and Everything"/>
+        <constructor-arg name="years" value="75000"/>
+    </bean>
+    <bean id="movieFinderBean" name="movieFinderBeanName" class="org.zxy.DependencyInjection.MovieFinder"/>
+    <bean id="simpleMovieLister" class="org.zxy.DependencyInjection.SimpleMovieLister">
+        <property name="movieFinder" ref="movieFinderBeanName"/>
+    </bean>
+    <bean class="org.zxy.DependencyInjection.AnotherBean" id="anotherBean"/>
+    <bean class="org.zxy.DependencyInjection.YetAnotherBean" id="yetAnotherBean"/>
+    <bean class="org.zxy.DependencyInjection.ExampleBeanBySet" id="exampleBeanBySet">
+        <!--<property name="beanOne" ref="anotherBean"/>-->
+        <!--<property name="beanTwo" ref="yetAnotherBean"/>-->
+        <!--<property name="integerProperty" value="1"/>-->
+    </bean>
+    <bean class="org.zxy.DependencyInjection.ExampleBeanByCons" id="exampleBeanByCons">
+        <constructor-arg type="org.zxy.DependencyInjection.AnotherBean" ref="anotherBean"/>
+        <constructor-arg ref="yetAnotherBean"/>
+        <constructor-arg value="22"/>
+    </bean>
+
+    <bean class="org.zxy.DependencyInjection.ComplexObject" id="complexObject">
+        <property name="adminEmails">
+            <props>
+                <prop key="administrator">administrator@example.org</prop>
+                <prop key="support">support@example.org</prop>
+                <prop key="development">development@example.org</prop>
+            </props>
+        </property>
+        <property name="someList">
+            <list>
+                <value>a list element followed by a reference</value>
+                <ref bean="movieFinderBean"/>
+            </list>
+        </property>
+        <property name="someSet">
+            <set>
+                <value>just some string</value>
+                <ref bean="yetAnotherBean" />
+            </set>
+        </property>
+        <property name="someMap">
+            <map>
+                <entry key="an entry" value="just some string"/>
+                <entry key ="a ref" value-ref="exampleBean"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="exampleBeanDependOn" class="org.zxy.DependencyInjection.ExampleBean" depends-on="complexObject,exampleBeanByCons">
+        <constructor-arg type="int" value="1"/>
+        <constructor-arg type="java.lang.String" value="llllllll"/>
+    </bean>
+</beans>

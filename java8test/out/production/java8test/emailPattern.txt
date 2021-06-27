@@ -1,0 +1,49 @@
+^([a-z0-9A-Z]+[_-|\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$
+^([a-z0-9A-Z]+[_|\.-]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$
+^([a-z0-9A-Z---_]+[_|\.-]?)+[a-z0-9A-Z---_]@([a-z0-9A-Z--]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z--]{2,}$
+测试通过
+
+zxy@163.com true
+test.test-1st2_test3@hotmail.com true
+test..test-1st2_test3@hotmail.com false
+test--test.1st2.test3@hotmail.com true
+test__test.1st2.test3@hotmail.com true
+test-test-1st2-test.test3@hotmail.com true
+.test-test-1st2-test.test3@hotmail.com false
+test-test-1st2-test.test3.@hotmail.com false
+-test-test-1st2-test.test3@hotmail.com true
+test-test-1st2-test.test3-@hotmail.com true
+_test-test-1st2-test.test3@hotmail.com true
+test-test-1st2-test.test3_@hotmail.com true
+zxy@163.com         true
+zxy@163..com        false
+zxy@163.com.cn      true
+zxy@163.com.cn      true
+zxy@163-178.com.cn  true
+zxy@163-178.com.cn  true
+zxy@163-178--com.cn true
+zxy@163-178--com.cn-- true
+zxy@-163178--com.cn-- true
+zxy@163178--com.cn- true
+zxy@163..178.com.cn false
+zxy@163178..com.cn  false
+zxy@163178.com.cn   true
+zxy@163178.com.cn.  false
+zxy@163178.com.cn.. false
+zxy@163178comcn     false
+
+
+邮箱格式需求：
+<Local part>@<Domain part>
+邮箱由Local part、@，以及Domain part三部分组合而成，其中邮箱有且只能含有一个@字符，@字符分隔开的Local part和Domain part的格式要求如下：
+
+Local part
+支持的字符分别为：A-Z，a-z，0-9，英文句号（.），连字符（-），以及下划线（_）。
+其中英文句号（.）不能出现在第一位和最后一位，且不能连续出现两次或两次以上。
+
+Domain part
+支持的字符分别为：A-Z，a-z，0-9，英文句号（.），以及连字符（-）。
+其中其中英文句号（.）不能出现在第一位和最后一位，且不能连续出现两次或两次以上；英文句号（.）必须存在，但最后两位字符均不可为英文句号（.）。
+
+邮箱长度需求：
+从30个字符变更为34个字符，此次仅前端进行变更，因为后续FPS会有变更计划，但是细节未定。

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+    在 properties 元素体内指定的属性首先被读取
+    然后根据 properties 元素中的 resource 属性读取类路径下属性文件或根据 url 属性指定的路径读取属性文件，并覆盖已读取的同名属性
+    最后读取作为方法参数传递的属性，并覆盖已读取的同名属性
+    -->
+    <properties resource="config.properties">
+        <!--这里的属性和配置文件里的名称一致的情况下，mybaits已properties文件为准-->
+        <!--<property name="password" value="1234567"/>-->
+    </properties>
+    <settings>
+        <setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+        <!--配置默认的执行器。SIMPLE 就是普通的执行器；REUSE 执行器会重用预处理语句(prepared statements)
+        BATCH 执行器将重用语句并执行批量更新。-->
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <setting name="defaultStatementTimeout" value="25"/>
+        <setting name="defaultFetchSize" value="100"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="logPrefix" value="xxxxMybatis"/>
+    </settings>
+    <typeAliases>
+        <!--指定mybatis扫描bena的包-->
+<!--        <package name="org.mybatis.example.domain"/>-->
+        <typeAlias type="org.mybatis.example.domain.Blog" alias="Blog"/>
+    </typeAliases>
+    <typeHandlers>
+        <package name="org.mybatis.example.typehandler"/>
+    </typeHandlers>
+    <plugins>
+<!--        <plugin interceptor="com.jd.overseas.hkbank.plugin.crypt.CryptInterceptor">-->
+<!--            <property name="encryptWithOutAnnotation" value="true"/>-->
+<!--            <property name="decryptWithOutAnnotation" value="true"/>-->
+<!--        </plugin>-->
+<!--        <plugin interceptor="com.jd.overseas.hkbank.plugin.crypt.ExecutorQueryInterceptor">-->
+<!--            <property name="encryptWithOutAnnotation" value="true"/>-->
+<!--            <property name="decryptWithOutAnnotation" value="true"/>-->
+<!--        </plugin>-->
+<!--        <plugin interceptor="com.jd.overseas.hkbank.plugin.crypt.ResultSetHandlerInterceptor">-->
+<!--        </plugin>-->
+        <plugin interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+            <property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect"/>
+            <property name="asyncTotalCount" value="false"/>
+        </plugin>
+    </plugins>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+                <property name="poolMaximumActiveConnections" value="10"/>
+                <property name="poolPingEnabled" value="true"/>
+                <property name="poolPingQuery" value="select * from blog"/>
+                <property name="poolPingConnectionsNotUsedFor" value="60"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <package name="org.mybatis.example.mapper"/>
+<!--        <mapper resource="mapper/BlogMapper.xml"/>-->
+<!--        <mapper resource="mapper/UserMapper.xml"/>-->
+        <!--<mapper class="org.mybatis.example.mapper.BlogMapper"/>-->
+    </mappers>
+</configuration>

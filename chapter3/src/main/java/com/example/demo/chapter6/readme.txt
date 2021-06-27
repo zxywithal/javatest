@@ -1,0 +1,3 @@
+transaction
+spring事务是通过aop做得，所以自己调用自己得方法会使事务机制失效，
+可以实现ApplicationContextAware 获取 applicationContext，在从applicationContext中获取自身对象执行
