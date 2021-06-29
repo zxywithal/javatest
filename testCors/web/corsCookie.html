@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookie交互机制（跨域）</title>
+    <!--导入Jquery-->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+</head>
+<body>
+<button id="btn">Cookie交互机制（跨域）</button>
+<div id="content"></div>
+<script>
+
+    // $.get("http://localhost:8080/testCors_war_exploded/cookie");
+
+    $("#btn").click(function () {
+        $.ajax({
+            type: "get",
+            url: "http://localhost:8080/testCors_war_exploded/cookie",
+            xhrFields: {
+                //服务返回Access-Control-Allow-Credentials和Access-Control-Allow-Origin后withCredentials是必须的
+                withCredentials: true
+            },
+            //测试发现和这个crossDomain 参数没有多大关系，只要服务返回了Access-Control-Allow-Credentials和Access-Control-Allow-Origin 就可以了
+            crossDomain: true
+        });
+    });
+
+</script>
+</body>
+</html>

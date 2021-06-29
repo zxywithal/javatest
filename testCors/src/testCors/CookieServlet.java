@@ -31,17 +31,21 @@ public class CookieServlet extends HttpServlet {
         if (cookies.isEmpty()) {
             Cookie cookie = new Cookie("name", "YourBatman");
             cookie.setMaxAge(3600);
-            cookie.setDomain("localhost");
+//            cookie.setDomain("localhost");
             resp.addCookie(cookie);
             Cookie age = new Cookie("age", "18");
             age.setMaxAge(3600);
-            age.setDomain("localhost");
+//            age.setDomain("localhost");
             resp.addCookie(age);
         } else {
             cookies.forEach(obj->{
                 System.out.println("name ["+obj.getName()+"] value ["+obj.getValue()+"] domain ["+obj.getDomain()+"] path ["+obj.getPath()+"] maxAge ["+obj.getMaxAge()+"] version ["+obj.getVersion()+"] source ["+obj.getSecure()+"]");
             });
         }
+        //设置可以跨域访问
+        resp.setHeader("Access-Control-Allow-Origin", originHeader);
+        //如果服务端在设置cookie的时候domain被设置为localhost的时候，则Access-Control-Allow-Credentials为空火狐浏览器可以接受cookie，否则Access-Control-Allow-Credentials 必须存在
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.getWriter().write("hello cookie...");
     }
 }
